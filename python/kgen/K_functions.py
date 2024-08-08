@@ -445,7 +445,7 @@ def calc_K(K, temp_c=default_temp_c, sal=default_sal, p_bar=default_p_bar, magne
     if sulphate is None:
         sulphate = calc_sulphate(sal=sal)
         
-    K = K_fns[K](coefficients=K_coefs[K], temp_c=temp_c, sal=sal)
+    K_val = K_fns[K](coefficients=K_coefs[K], temp_c=temp_c, sal=sal)
 
     KS_surf = K_fns['KS'](coefficients=K_coefs['KS'], temp_c=temp_c, sal=sal)
     KS_deep = KS_surf * calc_pressure_correction(coefficients=K_presscorr_coefs['KS'], p_bar=p_bar, temp_c=temp_c)
@@ -455,13 +455,13 @@ def calc_K(K, temp_c=default_temp_c, sal=default_sal, p_bar=default_p_bar, magne
     tot_to_sws_surface = (1 + sulphate / KS_surf + fluorine / KF_surf) / (1 + sulphate / KS_surf)  # convert from TOT to SWS before pressure correction
     sws_to_tot_deep = (1 + sulphate / KS_deep) / (1 + sulphate / KS_deep + fluorine / KF_deep)  # convert from SWS to TOT after pressure correction
     
-    K *= tot_to_sws_surface * calc_pressure_correction(coefficients=K_presscorr_coefs[K], p_bar=p_bar, temp_c=temp_c) * sws_to_tot_deep
+    K_val *= tot_to_sws_surface * calc_pressure_correction(coefficients=K_presscorr_coefs[K], p_bar=p_bar, temp_c=temp_c) * sws_to_tot_deep
 
     seawater_correction = calc_seawater_correction(K, temp_c=temp_c, sal=sal, magnesium=magnesium, calcium=calcium, MyAMI_mode=MyAMI_mode)
     if K in seawater_correction:
-        K *= seawater_correction[K]
+        K_val *= seawater_correction[K]
     
-    return K
+    return K_val
 
 def calc_Ks(K_list=K_fns.keys(), temp_c=default_temp_c, sal=default_sal, p_bar=default_p_bar, magnesium=default_magnesium, calcium=default_calcium, sulphate=None, fluorine=None, MyAMI_mode='calculate'):
     """
