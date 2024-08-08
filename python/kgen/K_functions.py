@@ -463,6 +463,8 @@ def calc_K(K, temp_c=default_temp_c, sal=default_sal, p_bar=default_p_bar, magne
     
     return K_val
 
+# TODO: calc_Ks fails on KB if there are nan values in the input.
+
 def calc_Ks(K_list=K_fns.keys(), temp_c=default_temp_c, sal=default_sal, p_bar=default_p_bar, magnesium=default_magnesium, calcium=default_calcium, sulphate=None, fluorine=None, MyAMI_mode='calculate'):
     """
     Calculate specified stoichiometric equilibrium constants at given
