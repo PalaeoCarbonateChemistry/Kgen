@@ -1,5 +1,9 @@
 # KGen History.
 
+## 0.3.3
+### Python
+Removed use of `pkg_resources`, which is deprecated in Python 3.10.
+
 ## 0.3.2
 ### Python
 Bug fix for when temperature/salinity are not specified - default to standard seawater conditions
