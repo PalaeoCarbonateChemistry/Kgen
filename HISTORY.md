@@ -1,5 +1,27 @@
 # KGen History.
 
+## 0.3.2
+### Python
+Bug fix for when temperature/salinity are not specified - default to standard seawater conditions
+
+### R
+Small changes for submission to CRAN
+
+## 0.3.1
+### All
+ - Clean up croscheck workflow and script.
+ 
+### R
+- adjust package call in zzz
+- initiate `seawater_correction`
+
+### Python
+ - Only perform pressure correction if some of the pressures are non-zero.
+ - Only perform seawater chemistry correction if some of the Mg and Ca are non-standard.
+
+### Matlab
+ - Updates to test scripts to run on pull requests.
+
 ## 0.3.0
 ### All
 - Further harmonisation across languages
