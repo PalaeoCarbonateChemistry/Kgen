@@ -1,8 +1,10 @@
 import json
 import os
-import pkg_resources as pkgrs
+import importlib.resources as importlib_resources
 
-coef_path = pkgrs.resource_filename('kgen', 'coefficients')
+# import pkg_resources as pkgrs
+
+coef_path = importlib_resources.path('kgen', 'coefficients')
 
 with open(os.path.join(coef_path, 'K_calculation.json'), 'r') as f:
     K_coefs = json.load(f)['coefficients']
