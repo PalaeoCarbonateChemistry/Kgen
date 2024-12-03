@@ -434,6 +434,13 @@ def calc_K(K, temp_c=25.0, sal=35.0, p_bar=0.0, magnesium=0.0528171, calcium=0.0
     if K not in K_fns:
         raise ValueError(f'{K} is not valid. Should be one of {K_fns.keys}')
 
+    if temp_c is None:
+        temp_c = 25.0
+    if sal is None:
+        sal = 35.0    
+    if p_bar is None:
+        p_bar = 0.0
+
     if fluorine is None:
         fluorine = calc_fluorine(sal=sal)
     if sulphate is None:
@@ -508,6 +515,13 @@ def calc_Ks(K_list=K_fns.keys(), temp_c=25.0, sal=35.0, p_bar=0.0, magnesium=0.0
     """
     if K_list is None:
         K_list = K_fns.keys()
+
+    if temp_c is None:
+        temp_c = 25.0
+    if sal is None:
+        sal = 35.0    
+    if p_bar is None:
+        p_bar = 0.0
     
     if fluorine is None:
         fluorine = calc_fluorine(sal=sal)

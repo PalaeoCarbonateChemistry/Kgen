@@ -1,7 +1,7 @@
 .onAttach <- function(lib, pkg) {
   packageStartupMessage(
     "Kgen v",
-    utils::packageDescription("Kgen",
+    utils::packageDescription("kgen",
       fields = "Version"
     ),
     paste0(" // pyMyAMI v", pymyami_version),

@@ -36,7 +36,8 @@ calc_K <-
     )
 
     KF <- k_value <- temp_k <- KF_deep <- KF_surf <- KS_deep <- KS_surf <-
-    check_pc <- pc <- sws_to_tot_deep <- tot_to_sws_surface <- row_id <- NULL
+    check_pc <- pc <- sws_to_tot_deep <- tot_to_sws_surface <- row_id <- 
+    seawater_correction <- NULL
     
     dat <- data.table::data.table(temp_c, sal, p_bar, magnesium, calcium, sulphate, fluorine)
     
