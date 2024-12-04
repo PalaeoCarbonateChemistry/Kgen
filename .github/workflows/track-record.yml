@@ -14,4 +14,4 @@ jobs:
             -H "Accept: application/vnd.github.v3+json" \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             https://api.github.com/repos/PalaeoCarbonateChemistry/Kgen-track-record/dispatches \
-            -d '{"event_type":"new-release"}'
+            -d '{"event_type":"new-release","client_payload":{"unit":false,"integration":true}}}'
