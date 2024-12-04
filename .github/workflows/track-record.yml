@@ -1,0 +1,17 @@
+name: Dispatch event to Kgen track record
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send repository dispatch event
+        run: |
+          curl -X POST \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/PalaeoCarbonateChemistry/Kgen-track-record/dispatches \
+            -d '{"event_type":"new-release"}'
