@@ -1,7 +1,7 @@
 # Kgen <img src="https://github.com/PalaeoCarb/Kgen/blob/docs/assets/images/logo.png" align="right" alt="" width="120" />
 Coefficients for consistently calculating and pressure correcting Ks for carbon calculation. 
 
-### [Find out about Kgen](https://palaeocarb.github.io/Kgen/).
+### [Find out about Kgen](https://palaeocarbonatechemistry.github.io/Kgen).
 
 ## Test Status
 
