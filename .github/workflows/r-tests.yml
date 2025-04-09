@@ -43,7 +43,7 @@ jobs:
             sudo apt-get install libcurl4-openssl-dev -y
             sudo apt-get install curl -y
 
-        - name: Kgen dependencies
+        - name: Install Test dependencies
           run: |
             install.packages(c("remotes", "rcmdcheck"))
             remotes::install_deps(pkgdir = "r/", dependencies = TRUE, upgrade = "never")
