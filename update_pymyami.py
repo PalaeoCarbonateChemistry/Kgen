@@ -59,7 +59,10 @@ with open('r/R/pymyami.R', 'r+') as f:
     f.write(''.join(lines))
     f.truncate()
 
-# update pymyami version in Github Actions
+
+###########################
+# GitHub Actions
+###########################
 
 actions = glob('.github/workflows/*.yml')
 
