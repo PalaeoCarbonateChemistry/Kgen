@@ -1,37 +1,17 @@
----
-name: 'Generate track record'
-
+name: Dispatch event to Kgen track record
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+  release:
+    types: [published]
 
 jobs:
-  generate:
-    permissions:
-      contents: write
+  dispatch:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ['3.10']
-    name: Track record
     steps:
-      - uses: actions/checkout@v2
-      - name: "Set Up Python"
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: "Install Dependencies"
+      - name: Send repository dispatch event
         run: |
-          cd python
-          python3 -m pip install -r requirements.txt
-      - name: 'Run generate track record'
-        run: |
-          python3 ./track_record/generate_track_record.py
-      - name: 'Recommit information'  
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Automated update of track_record
-          file_pattern: './track_record/K_track_record.json ./track_record/recent.png'
-        
-
+          curl -X POST \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token ${{ secrets.KGEN_DISPATCH_TRACK_RECORD }}" \
+            https://api.github.com/repos/PalaeoCarbonateChemistry/Kgen-track-record/dispatches \
+            -d '{"event_type":"new-release","client_payload":{"unit":false,"integration":true}}'
