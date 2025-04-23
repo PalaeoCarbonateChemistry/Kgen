@@ -7,7 +7,7 @@ from kgen.K_functions import K_fns, calc_pressure_correction, calc_Ks
 # boilerplate to deal with file paths
 cwd = os.getcwd()
 
-if 'setup.py' in os.listdir(cwd):
+if 'pyproject.toml' in os.listdir(cwd):
     dir = '..'
 else:
     dir = '.'
