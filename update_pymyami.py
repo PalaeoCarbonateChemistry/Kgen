@@ -9,7 +9,7 @@ import re
 pymyami_version = '2.1.0'
 
 # path to file containing polynomial coefficients
-polynomial_coefficient_path = f'https://raw.githubusercontent.com/PalaeoCarb/pymyami/{pymyami_version}/pymyami/parameters/seawater_correction_approximated.json'
+polynomial_coefficient_path = f'https://raw.githubusercontent.com/PalaeoCarbonateChemistry/pymyami/{pymyami_version}/pymyami/parameters/seawater_correction_approximated.json'
 
 pattern = re.compile(r'(.*)(pymyami==)([0-9.]+)(.*)')
 
@@ -18,7 +18,7 @@ pattern = re.compile(r'(.*)(pymyami==)([0-9.]+)(.*)')
 ###########################
 
 # update requirements.txt
-files = ['python/requirements.txt', 'python/setup.cfg']
+files = ['python/requirements.txt', 'python/pyproject.toml']
 
 for file in files:
     with open(file, 'r+') as f:
