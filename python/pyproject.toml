@@ -18,7 +18,7 @@ classifiers = [
 ]
 dependencies = [
     "numpy>=1.21.5",
-    "pymyami==2.1.0"
+    "pymyami==2.1.1"
 ]
 
 [project.urls]

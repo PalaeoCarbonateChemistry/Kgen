@@ -1,5 +1,5 @@
 # Select pyMyAMI version
-pymyami_version <- "2.1.0"
+pymyami_version <- "2.1.1"
 
 .onLoad <- function(...) {
   reticulate::py_require(paste0("pymyami==", pymyami_version))

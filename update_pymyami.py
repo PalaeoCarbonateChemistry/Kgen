@@ -6,7 +6,7 @@ from glob import glob
 import re
 
 # specify which pymyami version to use throughout Kgen
-pymyami_version = '2.1.0'
+pymyami_version = '2.1.1'
 
 # path to file containing polynomial coefficients
 polynomial_coefficient_path = f'https://raw.githubusercontent.com/PalaeoCarbonateChemistry/pymyami/{pymyami_version}/pymyami/parameters/seawater_correction_approximated.json'
