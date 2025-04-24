@@ -1,5 +1,12 @@
 # KGen History.
 
+## 0.4.0
+### All
+Updated pymyami to version 2.1.1
+
+### R
+Updated the reticulate framework for greater automation
+
 ## 0.3.3
 ### Python
 Removed use of `pkg_resources`, which is deprecated in Python 3.10.

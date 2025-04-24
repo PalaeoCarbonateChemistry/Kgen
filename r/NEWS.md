@@ -1,3 +1,6 @@
+## 0.4.0
+- Updated pymyami dependency to v2.1.1
+
 # kgen 0.3.2
 - Bump to reticulate 1.42.0 to let uv handle python installation
 
