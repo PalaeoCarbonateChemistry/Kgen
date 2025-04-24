@@ -80,7 +80,6 @@ calc_seawater_correction <-
 
     # Calculate correction factor
     if (tolower(method) == "myami") {
-      pymyami <- reticulate::import("pymyami")
       seawater_correction <-
         pymyami$calculate_seawater_correction(
           Sal = sal,
@@ -90,7 +89,6 @@ calc_seawater_correction <-
         )
     }
     if (tolower(method) == "myami_polynomial") {
-      pymyami <- reticulate::import("pymyami")
       seawater_correction <-
         pymyami$approximate_seawater_correction(
           Sal = sal,

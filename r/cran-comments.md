@@ -1,3 +1,5 @@
+## 0.3.2
+Bump to reticulate 1.42.0 to let uv handle python installation
 
 ## 0.3.0
 ### All

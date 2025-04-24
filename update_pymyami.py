@@ -48,7 +48,7 @@ urllib.request.urlretrieve(polynomial_coefficient_path, "matlab/polynomial_coeff
 urllib.request.urlretrieve(polynomial_coefficient_path, "r/inst/coefficients/polynomial_coefficients.json")
 
 # update pymyami version
-with open('r/R/pymyami.R', 'r+') as f:
+with open('r/R/zzz.R', 'r+') as f:
     lines = f.readlines()
     
     for i, line in enumerate(lines):

@@ -1,10 +1,3 @@
-skip_if_no_pymyami <- function() {
-  have_pymyami <- reticulate::py_module_available("pymyami")
-  if (!have_pymyami) {
-    testthat::skip("pymyami not available for testing")
-  }
-}
-
 testthat::test_that("Test that R_Polynomial produces expected results...", {
   exp_val <- rjson::fromJSON(file = system.file("check_values/check_Ks.json", package = "kgen"))
   calc_val <- calc_Ks(temp_c = exp_val$input_conditions$TC, sal = exp_val$input_conditions$S, method = "R_Polynomial")

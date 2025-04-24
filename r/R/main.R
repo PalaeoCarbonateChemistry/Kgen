@@ -36,25 +36,13 @@ calc_K <-
     )
 
     KF <- k_value <- temp_k <- KF_deep <- KF_surf <- KS_deep <- KS_surf <-
-    check_pc <- pc <- sws_to_tot_deep <- tot_to_sws_surface <- row_id <- 
-    seawater_correction <- NULL
-    
+      check_pc <- pc <- sws_to_tot_deep <- tot_to_sws_surface <- row_id <-
+      seawater_correction <- NULL
+
     dat <- data.table::data.table(temp_c, sal, p_bar, magnesium, calcium, sulphate, fluorine)
-    
+
     # Celsius to Kelvin
     dat[, temp_k := temp_c + 273.15]
-
-    # Check if miniconda is installed
-    if (!mc_exists() & tolower(method) != "r_polynomial") {
-      warning("Kgen requires r-Miniconda which appears to not exist on your system.")
-      install_confirm <-
-        utils::askYesNo("Would you like to install it now?")
-      if (install_confirm) {
-        install_pymyami()
-      } else {
-        stop("Closing Kgen.")
-      }
-    }
 
     # Load K_calculation.json
     K_coefs <-
