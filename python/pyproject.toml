@@ -27,3 +27,6 @@ PalaeoCarbonateChemistry = "https://github.com/PalaeoCarbonateChemistry"
 
 [tool.setuptools.dynamic]
 version = { attr = "kgen.VERSION" }
+
+[tool.setuptools.package-data]
+kgen = ["coefficients/*.json"]
