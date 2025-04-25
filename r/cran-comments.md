@@ -1,3 +1,6 @@
+## 1.0.0
+Stabilise
+
 ## 0.4.0
 Updated pymyami dependency to v2.1.1
 

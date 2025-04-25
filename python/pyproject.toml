@@ -12,7 +12,7 @@ authors = [
     { name = "Ross Whiteford", email = "Ross.Whiteford@rhul.ac.uk"},
     { name = "Dennis Mayk", email = "dm807@cantab.ac.uk"}
 ]
-license = { text = "MIT" }
+license = "MIT"
 classifiers = [
     "Programming Language :: Python :: 3"
 ]
@@ -24,3 +24,6 @@ dependencies = [
 [project.urls]
 Homepage  = "https://github.com/PalaeoCarbonateChemistry/Kgen"
 PalaeoCarbonateChemistry = "https://github.com/PalaeoCarbonateChemistry"
+
+[tool.setuptools.dynamic]
+version = { attr = "kgen.VERSION" }
