@@ -1,5 +1,9 @@
 # KGen History.
 
+## 1.0.1
+### Python
+- Fixed pyproject.toml to include coefficient files in distribution.
+
 ## 1.0.0
 ### All
 Stabilise to v1.0.0!
