@@ -1,7 +1,7 @@
 Package: kgen
 Type: Package
 Title: A Tool for Calculating Stoichiometric Equilibrium Constants (Ks) for Seawater
-Version: 0.4.0
+Version: 1.0.0
 Authors@R: 
     person(given = "Dennis",
            family = "Mayk",
