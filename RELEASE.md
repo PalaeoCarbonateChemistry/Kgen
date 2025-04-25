@@ -43,15 +43,4 @@ Should follow X.Y.Z, where X and Y are cross-platform major and minor releases, 
 
 ## When pymyami is updated 
 
-### Python
-
-Nothing to do - latest version is used by default.
-
-### matlab
-
-- [ ] Run `update_pymyami.py`
-
-### R
-
-- [ ] Update pymyami version in `FILE PATH and LINE NUMBER`
-- [ ] Update `polynomial_coefficients` to match `pymyami/parameters/Fcorr_approx.json`
+- [ ] Run `update_pymyami.py` to update all pymyami references to latest version number.

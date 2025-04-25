@@ -43,13 +43,10 @@ jobs:
             sudo apt-get install libcurl4-openssl-dev -y
             sudo apt-get install curl -y
 
-        - name: Kgen dependencies
+        - name: Install Test dependencies
           run: |
             install.packages(c("remotes", "rcmdcheck"))
             remotes::install_deps(pkgdir = "r/", dependencies = TRUE, upgrade = "never")
-            reticulate::install_miniconda()
-            reticulate::use_miniconda("r-reticulate")
-            reticulate::py_install("pymyami==2.1.0", envname = "r-reticulate", pip=T)
           shell: Rscript {0}
           
         - name: Check

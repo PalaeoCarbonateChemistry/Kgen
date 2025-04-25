@@ -10,10 +10,10 @@ pymyami-update:
 	python update_pymyami.py
 
 build-python:
-	cd python; 	python setup.py sdist bdist_wheel
+	cd python; 	python -m build
 
 upload-python:
-	cd python; 	twine upload dist/Kgen-$$(python setup.py --version)*
+	cd python; 	twine upload dist/*
 
 distribute-python:
 	make test-python

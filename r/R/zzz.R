@@ -1,3 +1,11 @@
+# Select pyMyAMI version
+pymyami_version <- "2.1.1"
+
+.onLoad <- function(...) {
+  reticulate::py_require(paste0("pymyami==", pymyami_version))
+  pymyami <<- reticulate::import("pymyami", delay_load = TRUE)
+}
+
 .onAttach <- function(lib, pkg) {
   packageStartupMessage(
     "Kgen v",

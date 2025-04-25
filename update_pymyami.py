@@ -6,10 +6,10 @@ from glob import glob
 import re
 
 # specify which pymyami version to use throughout Kgen
-pymyami_version = '2.1.0'
+pymyami_version = '2.1.1'
 
 # path to file containing polynomial coefficients
-polynomial_coefficient_path = f'https://raw.githubusercontent.com/PalaeoCarb/pymyami/{pymyami_version}/pymyami/parameters/seawater_correction_approximated.json'
+polynomial_coefficient_path = f'https://raw.githubusercontent.com/PalaeoCarbonateChemistry/pymyami/{pymyami_version}/pymyami/parameters/seawater_correction_approximated.json'
 
 pattern = re.compile(r'(.*)(pymyami==)([0-9.]+)(.*)')
 
@@ -18,7 +18,7 @@ pattern = re.compile(r'(.*)(pymyami==)([0-9.]+)(.*)')
 ###########################
 
 # update requirements.txt
-files = ['python/requirements.txt', 'python/setup.cfg']
+files = ['python/requirements.txt', 'python/pyproject.toml']
 
 for file in files:
     with open(file, 'r+') as f:
@@ -48,7 +48,7 @@ urllib.request.urlretrieve(polynomial_coefficient_path, "matlab/polynomial_coeff
 urllib.request.urlretrieve(polynomial_coefficient_path, "r/inst/coefficients/polynomial_coefficients.json")
 
 # update pymyami version
-with open('r/R/pymyami.R', 'r+') as f:
+with open('r/R/zzz.R', 'r+') as f:
     lines = f.readlines()
     
     for i, line in enumerate(lines):
@@ -59,7 +59,10 @@ with open('r/R/pymyami.R', 'r+') as f:
     f.write(''.join(lines))
     f.truncate()
 
-# update pymyami version in Github Actions
+
+###########################
+# GitHub Actions
+###########################
 
 actions = glob('.github/workflows/*.yml')
 
