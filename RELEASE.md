@@ -27,7 +27,7 @@ Should follow X.Y.Z, where X and Y are cross-platform major and minor releases, 
 ### Python
 
 - [ ] Update `VERSION` in `kgen/__init__.py`
-- [ ] run `make distribute python`
+- [ ] run `make distribute-python`
 
 ### matlab
 
