@@ -144,7 +144,7 @@ calc_Ks <-
     }
 
     # Calculate ks
-    ks_list <- pbapply::pblapply(ks, function(k) {
+    ks_list <- lapply(ks, function(k) {
       calc_K(
         k = k,
         temp_c = temp_c,

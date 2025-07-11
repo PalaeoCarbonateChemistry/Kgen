@@ -17,7 +17,6 @@ Imports:
     rjson (>= 0.2.21),
     reticulate (>= 1.42.0),
     checkmate (>= 2.1.0),
-    pbapply (>= 1.7.0),
     data.table (>= 1.14.6)
 Suggests:
     testthat (>= 3.0.0)
