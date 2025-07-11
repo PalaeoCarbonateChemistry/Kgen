@@ -44,11 +44,6 @@ calc_K <-
     # Celsius to Kelvin
     dat[, temp_k := temp_c + 273.15]
 
-    # Load K_calculation.json
-    K_coefs <-
-      rjson::fromJSON(file = system.file("coefficients/K_calculation.json", package = "kgen"))
-    K_coefs <- K_coefs$coefficients
-
     # Select function and run calculation
     K_fn <- K_fns[[k]]
     dat[, k_value := K_fn(
@@ -59,10 +54,6 @@ calc_K <-
 
     # Pressure correction?
     if (!is.null(p_bar)) {
-      # Load K_pressure_correction.json
-      K_presscorr_coefs <-
-        rjson::fromJSON(file = system.file("coefficients/K_pressure_correction.json", package = "kgen"))
-      K_presscorr_coefs <- K_presscorr_coefs$coefficients
 
       if (is.null(sulphate)) {
         dat[, sulphate := calc_sulphate(sal = sal)]

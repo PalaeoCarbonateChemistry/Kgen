@@ -16,11 +16,6 @@ calc_pressure_correction <- function(k, temp_c, p_bar) {
     checkmate::check_numeric(temp_c, lower = 0, upper = 40)
   )
 
-  # Load K_pressure_correction.json
-  K_presscorr_coefs <-
-    rjson::fromJSON(file = system.file("coefficients/K_pressure_correction.json", package = "kgen"))
-  K_presscorr_coefs <- K_presscorr_coefs$coefficients
-
   out <-
     calc_pc(
       coefficients = K_presscorr_coefs[[k]],
@@ -94,12 +89,10 @@ calc_seawater_correction <-
           Sal = sal,
           TempC = temp_c,
           Mg = magnesium,
-          Ca = calcium
+          Ca =fromJSON calcium
         )
     }
     if (tolower(method) == "r_polynomial") {
-      poly_coefs <-
-        rjson::fromJSON(file = system.file("coefficients/polynomial_coefficients.json", package = "kgen"))
       # Calculate correction factors
       seawater_correction <- NULL
       if (k %in% names(poly_coefs)) {
