@@ -11,7 +11,6 @@ Authors@R:
 License: MIT + file LICENSE
 Description: A unified software package simultaneously implemented in 'Python', 'R', and 'Matlab' providing a uniform and internally-consistent way of calculating stoichiometric equilibrium constants in modern and palaeo seawater as a function of temperature, salinity, pressure and the concentration of magnesium, calcium, sulphate, and fluorine.
 Encoding: UTF-8
-Collate: 'coefficients.R' 'K_functions.R' 'utility.R' 'main.R' 'Kgen-package.R' 'zzz.R'
 Depends:
     R (>= 4.0)
 Imports:
