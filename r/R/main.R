@@ -20,6 +20,11 @@ calc_K <-
            sulphate = NULL,
            fluorine = NULL,
            method = "r_polynomial") {
+
+    # Access coefficients from package environment
+    K_coefs <- .kgen_env$K_coefs
+    K_presscorr_coefs <- .kgen_env$K_presscorr_coefs
+
     # Check input values
     checkmate::assert(
       combine = "and",

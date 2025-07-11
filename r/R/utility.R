@@ -9,7 +9,13 @@
 #' @param p_bar Pressure (Bar)
 #' @return pressure correction factor
 #' @export
+
+.kgen_env = get(".kgen_env", envir = .GlobalEnv)
+
 calc_pressure_correction <- function(k, temp_c, p_bar) {
+  # Access coefficients from package environment
+  K_presscorr_coefs <- .kgen_env$K_presscorr_coefs
+
   checkmate::assert(
     combine = "and",
     checkmate::check_character(k),
@@ -72,6 +78,9 @@ calc_seawater_correction <-
     checkmate::assert_choice(tolower(method),
       choices = c("myami", "myami_polynomial", "r_polynomial")
     )
+
+    # Access coefficients from package environment
+    poly_coefs <- .kgen_env$poly_coefs
 
     # Calculate correction factor
     if (tolower(method) == "myami") {
