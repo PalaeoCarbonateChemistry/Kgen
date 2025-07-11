@@ -89,7 +89,7 @@ calc_seawater_correction <-
           Sal = sal,
           TempC = temp_c,
           Mg = magnesium,
-          Ca =fromJSON calcium
+          Ca = calcium
         )
     }
     if (tolower(method) == "r_polynomial") {
