@@ -10,8 +10,6 @@
 #' @return pressure correction factor
 #' @export
 
-.kgen_env = get(".kgen_env", envir = .GlobalEnv)
-
 calc_pressure_correction <- function(k, temp_c, p_bar) {
   # Access coefficients from package environment
   K_presscorr_coefs <- .kgen_env$K_presscorr_coefs
