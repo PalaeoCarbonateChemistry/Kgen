@@ -1,18 +1,27 @@
-# Select pyMyAMI version
-pymyami_version <- "2.1.1"
+# Create new env to store pkg specific variables in memory
+kgen.pkg.env <- new.env()
 
-.onLoad <- function(...) {
-  reticulate::py_require(paste0("pymyami==", pymyami_version))
-  pymyami <<- reticulate::import("pymyami", delay_load = TRUE)
-}
+# Select pyMyAMI version
+kgen.pkg.env$pymyami_version <- "2.1.1"
+
+# Load K_calculation.json
+kgen.pkg.env$K_coefs <-
+  rjson::fromJSON(file = system.file("coefficients/K_calculation.json", package = "kgen"))$coefficients
+
+# Load K_pressure_correction.json
+kgen.pkg.env$K_presscorr_coefs <-
+  rjson::fromJSON(file = system.file("coefficients/K_pressure_correction.json", package = "kgen"))$coefficients
+
+kgen.pkg.env$poly_coefs <-
+  rjson::fromJSON(file = system.file("coefficients/polynomial_coefficients.json", package = "kgen"))
 
 .onAttach <- function(lib, pkg) {
-  packageStartupMessage(
-    "Kgen v",
-    utils::packageDescription("kgen",
-      fields = "Version"
-    ),
-    paste0(" // pyMyAMI v", pymyami_version),
-    appendLF = TRUE
-  )
+  if (is(future::plan(), "sequential")) {
+    packageStartupMessage(
+      "Kgen v",
+      utils::packageDescription("kgen", fields = "Version"),
+      paste0(" // pyMyAMI v", kgen.pkg.env$pymyami_version),
+      appendLF = TRUE
+    )
+  }
 }
