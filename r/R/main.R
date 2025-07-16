@@ -134,7 +134,7 @@ calc_K <-
 #'   calcium = 0:0.06
 #' ))
 #'
-#' res <- do.call(what = kgen::calc_Ks, args = dt_list)
+#' res <- do.call(what = calc_Ks, args = dt_list)
 #' }
 #' @return Data.table of \strong{multiple} Ks at given conditions
 #' @export

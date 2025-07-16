@@ -77,7 +77,7 @@ dt_list <- as.list(data.table::CJ(
   calcium = 0:0.06
 ))
 
-res <- do.call(what = kgen::calc_Ks, args = dt_list)
+res <- do.call(what = calc_Ks, args = dt_list)
 }
 }
 \author{
