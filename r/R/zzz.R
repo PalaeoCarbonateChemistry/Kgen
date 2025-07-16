@@ -16,7 +16,7 @@ kgen.pkg.env$poly_coefs <-
   rjson::fromJSON(file = system.file("coefficients/polynomial_coefficients.json", package = "kgen"))
 
 .onAttach <- function(lib, pkg) {
-  if (is(future::plan(), "sequential")) {
+  if (methods::is(future::plan(), "sequential")) {
     packageStartupMessage(
       "Kgen v",
       utils::packageDescription("kgen", fields = "Version"),
