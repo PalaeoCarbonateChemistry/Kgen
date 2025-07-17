@@ -16,14 +16,9 @@ calc_pressure_correction <- function(k, temp_c, p_bar) {
     checkmate::check_numeric(temp_c, lower = 0, upper = 40)
   )
 
-  # Load K_pressure_correction.json
-  K_presscorr_coefs <-
-    rjson::fromJSON(file = system.file("coefficients/K_pressure_correction.json", package = "kgen"))
-  K_presscorr_coefs <- K_presscorr_coefs$coefficients
-
   out <-
     calc_pc(
-      coefficients = K_presscorr_coefs[[k]],
+      coefficients = kgen.pkg.env$K_presscorr_coefs[[k]],
       p_bar = p_bar,
       temp_c = temp_c
     )
@@ -38,25 +33,28 @@ calc_pressure_correction <- function(k, temp_c, p_bar) {
 #' @inheritParams calc_K1
 #' @param magnesium magnesium concentration in mol/kgsw. If None, modern is assumed (0.0528171). Should be the average magnesium concentration in seawater - a salinity correction is then applied to calculate the magnesium concentration in the sample.
 #' @param calcium calcium concentration in mol/kgsw. If None, modern is assumed (0.0102821). Should be the average calcium concentration in seawater - a salinity correction is then applied to calculate the magnesium concentration in the sample.
-kgen_poly <-
-  function(sal,
-           temp_c,
-           magnesium = 0.0528171,
-           calcium = 0.0102821) {
-    temp_k <- temp_c + 273.15
+kgen_poly <- function(sal, temp_c, magnesium = 0.0528171, calcium = 0.0102821) {
+  # Ensure all inputs are the same length
+  n <- length(sal)
+  if (length(temp_c) != n) temp_c <- rep(temp_c, length.out = n)
+  if (length(magnesium) != n) magnesium <- rep(magnesium, length.out = n)
+  if (length(calcium) != n) calcium <- rep(calcium, length.out = n)
 
-    # Create descriptor vector
-    dx <- t(c(temp_k, log(temp_k), sal, magnesium, calcium))
+  temp_k <- temp_c + 273.15
 
-    # Build poly matrix
-    dy <- stats::poly(dx, degree = 3, raw = TRUE)
+  dx <- cbind(temp_k, log(temp_k), sal, magnesium, calcium)
+  dy <- stats::poly(dx, degree = 3, raw = TRUE)
 
-    # Sort by index - according to python output
-    out <-
-      c(1, dy[order(-attr(dy, "degree"), colnames(dy), decreasing = TRUE)])
+  # Add intercept column (all 1s) and reorder columns
+  # Sort by index - according to python output
+  col_order <- order(-attr(dy, "degree"), colnames(dy), decreasing = TRUE)
+  dy_ordered <- dy[, col_order, drop = FALSE]
 
-    return(out)
-  }
+  # Add intercept column at the beginning
+  out <- cbind(1, dy_ordered)
+
+  return(out)
+}
 
 #' @title Kgen seawater composition correction function
 #'
@@ -80,6 +78,8 @@ calc_seawater_correction <-
 
     # Calculate correction factor
     if (tolower(method) == "myami") {
+      pymyami <- reticulate::import("pymyami", delay_load = FALSE)
+
       seawater_correction <-
         pymyami$calculate_seawater_correction(
           Sal = sal,
@@ -89,6 +89,8 @@ calc_seawater_correction <-
         )
     }
     if (tolower(method) == "myami_polynomial") {
+      pymyami <- reticulate::import("pymyami", delay_load = FALSE)
+
       seawater_correction <-
         pymyami$approximate_seawater_correction(
           Sal = sal,
@@ -98,19 +100,20 @@ calc_seawater_correction <-
         )
     }
     if (tolower(method) == "r_polynomial") {
-      poly_coefs <-
-        rjson::fromJSON(file = system.file("coefficients/polynomial_coefficients.json", package = "kgen"))
       # Calculate correction factors
       seawater_correction <- NULL
-      if (k %in% names(poly_coefs)) {
-        seawater_correction <- list(sapply(seq_along(sal), function(ii) {
-          poly_coefs[[k]] %*% kgen_poly(
-            sal = sal[ii],
-            temp_c = temp_c[ii],
-            magnesium = magnesium[ii],
-            calcium = calcium[ii]
-          )
-        }, simplify = TRUE))
+      if (k %in% names(kgen.pkg.env$poly_coefs)) {
+        # Vectorized computation - no more sapply!
+        poly_matrix <- kgen_poly(
+          sal = sal,
+          temp_c = temp_c,
+          magnesium = magnesium,
+          calcium = calcium
+        )
+
+        # Matrix multiplication: each row of poly_matrix multiplied by coefficients
+        # This gives us a vector of results for all input combinations
+        seawater_correction <- list(as.vector(poly_matrix %*% kgen.pkg.env$poly_coefs[[k]]))
         names(seawater_correction) <- k
       }
     }
