@@ -16,7 +16,7 @@ kgen.pkg.env$poly_coefs <-
   rjson::fromJSON(file = system.file("coefficients/polynomial_coefficients.json", package = "kgen"))
 
 .onLoad <- function(...) {
-  reticulate::py_require(paste0("pymyami==", pymyami_version))
+  reticulate::py_require(paste0("pymyami==", kgen.pkg.env$pymyami_version))
 }
 
 .onAttach <- function(lib, pkg) {
