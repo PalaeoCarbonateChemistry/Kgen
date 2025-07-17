@@ -78,7 +78,6 @@ calc_seawater_correction <-
 
     # Calculate correction factor
     if (tolower(method) == "myami") {
-      reticulate::py_require(paste0("pymyami==", kgen.pkg.env$pymyami_version))
       pymyami <- reticulate::import("pymyami", delay_load = FALSE)
 
       seawater_correction <-
@@ -90,7 +89,6 @@ calc_seawater_correction <-
         )
     }
     if (tolower(method) == "myami_polynomial") {
-      reticulate::py_require(paste0("pymyami==", kgen.pkg.env$pymyami_version))
       pymyami <- reticulate::import("pymyami", delay_load = FALSE)
 
       seawater_correction <-
