@@ -63,6 +63,23 @@ Calculate \strong{a single} specified stoichiometric equilibrium constant at giv
 \item \code{calc_Ks()}: Wrapper to calculate \strong{multiple} stoichiometric equilibrium constants at given temperature, salinity, pressure and the concentration of magnesium, calcium, sulphate, and fluorine.
 
 }}
+\examples{
+\dontrun{
+future::plan(future::multisession,
+  workers = parallelly::availableCores() - 1
+)
+
+dt_list <- as.list(data.table::CJ(
+  temp_c = seq_len(40),
+  sal = 30:40,
+  p_bar = 0:100,
+  magnesium = 0:0.06,
+  calcium = 0:0.06
+))
+
+res <- do.call(what = calc_Ks, args = dt_list)
+}
+}
 \author{
 Dennis Mayk
 }

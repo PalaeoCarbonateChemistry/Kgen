@@ -44,26 +44,16 @@ calc_K <-
     # Celsius to Kelvin
     dat[, temp_k := temp_c + 273.15]
 
-    # Load K_calculation.json
-    K_coefs <-
-      rjson::fromJSON(file = system.file("coefficients/K_calculation.json", package = "kgen"))
-    K_coefs <- K_coefs$coefficients
-
     # Select function and run calculation
     K_fn <- K_fns[[k]]
     dat[, k_value := K_fn(
-      coefficients = K_coefs[[k]],
+      coefficients = kgen.pkg.env$K_coefs[[k]],
       temp_c = temp_c,
       sal = sal
     )]
 
     # Pressure correction?
     if (!is.null(p_bar)) {
-      # Load K_pressure_correction.json
-      K_presscorr_coefs <-
-        rjson::fromJSON(file = system.file("coefficients/K_pressure_correction.json", package = "kgen"))
-      K_presscorr_coefs <- K_presscorr_coefs$coefficients
-
       if (is.null(sulphate)) {
         dat[, sulphate := calc_sulphate(sal = sal)]
       } else {
@@ -76,19 +66,19 @@ calc_K <-
         dat[is.na(fluorine), fluorine := calc_fluorine(sal = sal)]
       }
 
-      dat[, KS_surf := K_fns[["KS"]](coefficients = K_coefs[["KS"]],
+      dat[, KS_surf := K_fns[["KS"]](coefficients = kgen.pkg.env$K_coefs[["KS"]],
         temp_c = temp_c,
         sal = sal)]
       dat[, KS_deep := KS_surf * calc_pc(
-        coefficients = K_presscorr_coefs[["KS"]],
+        coefficients = kgen.pkg.env$K_presscorr_coefs[["KS"]],
         p_bar = p_bar,
         temp_c = temp_c
       )]
-      dat[, KF_surf := K_fns[["KF"]](coefficients = K_coefs[["KF"]],
+      dat[, KF_surf := K_fns[["KF"]](coefficients = kgen.pkg.env$K_coefs[["KF"]],
         temp_c = temp_c,
         sal = sal)]
       dat[, KF_deep := KF_surf * calc_pc(
-        coefficients = K_presscorr_coefs[["KF"]],
+        coefficients = kgen.pkg.env$K_presscorr_coefs[["KF"]],
         p_bar = p_bar,
         temp_c = temp_c
       )]
@@ -130,6 +120,22 @@ calc_K <-
 #'
 #' @inheritParams calc_K
 #' @param ks character vectors of Ks to be calculated e.g., c("K0", "K1") (Default: NULL, calculate all Ks)
+#' @examples
+#' \dontrun{
+#' future::plan(future::multisession,
+#'   workers = parallelly::availableCores() - 1
+#' )
+#'
+#' dt_list <- as.list(data.table::CJ(
+#'   temp_c = seq_len(40),
+#'   sal = 30:40,
+#'   p_bar = 0:100,
+#'   magnesium = 0:0.06,
+#'   calcium = 0:0.06
+#' ))
+#'
+#' res <- do.call(what = calc_Ks, args = dt_list)
+#' }
 #' @return Data.table of \strong{multiple} Ks at given conditions
 #' @export
 calc_Ks <-
@@ -148,18 +154,23 @@ calc_Ks <-
     }
 
     # Calculate ks
-    ks_list <- pbapply::pblapply(ks, function(k) {
-      calc_K(
-        k = k,
-        temp_c = temp_c,
-        sal = sal,
-        p_bar = p_bar,
-        magnesium = magnesium,
-        calcium = calcium,
-        sulphate = sulphate,
-        fluorine = fluorine,
-        method = method
-      )
+    progressr::with_progress({
+      p <- progressr::progressor(along = ks)
+      ks_list <- future.apply::future_lapply(ks, function(k) {
+        result <- calc_K(
+          k = k,
+          temp_c = temp_c,
+          sal = sal,
+          p_bar = p_bar,
+          magnesium = magnesium,
+          calcium = calcium,
+          sulphate = sulphate,
+          fluorine = fluorine,
+          method = method
+        )
+        p()
+        return(result)
+      }, future.seed = 1804)
     })
 
     # Return data.table

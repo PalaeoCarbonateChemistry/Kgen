@@ -1,7 +1,7 @@
 Package: kgen
 Type: Package
 Title: A Tool for Calculating Stoichiometric Equilibrium Constants (Ks) for Seawater
-Version: 1.0.0
+Version: 1.0.2
 Authors@R: 
     person(given = "Dennis",
            family = "Mayk",
@@ -17,8 +17,11 @@ Imports:
     rjson (>= 0.2.21),
     reticulate (>= 1.42.0),
     checkmate (>= 2.1.0),
-    pbapply (>= 1.7.0),
-    data.table (>= 1.14.6)
+    data.table (>= 1.14.6),
+    future (>= 1.58.0),
+    progressr (>= 0.15.1),
+    future.apply (>= 1.20.0),
+    methods (>= 4.4.2)
 Suggests:
     testthat (>= 3.0.0)
 Roxygen: list(markdown = TRUE)
