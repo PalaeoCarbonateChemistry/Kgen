@@ -28,12 +28,21 @@ calc_K <-
         tolower(method),
         choices = c("r_polynomial", "myami_polynomial", "myami")
       ),
-      checkmate::check_string(k),
-      checkmate::check_numeric(temp_c, lower = 0, upper = 40),
-      checkmate::check_numeric(sal, lower = 30, upper = 40),
-      checkmate::check_numeric(magnesium, lower = 0, upper = 0.06),
-      checkmate::check_numeric(calcium, lower = 0, upper = 0.06)
+      checkmate::check_string(k)
     )
+
+    if (!checkmate::test_numeric(temp_c, lower = 0, upper = 40)) {
+      warning("temp_c is outside the recommended range [0, 40].")
+    }
+    if (!checkmate::test_numeric(sal, lower = 30, upper = 40)) {
+      warning("sal is outside the recommended range [30, 40].")
+    }
+    if (!checkmate::test_numeric(magnesium, lower = 0, upper = 0.06)) {
+      warning("magnesium is outside the recommended range [0, 0.06].")
+    }
+    if (!checkmate::test_numeric(calcium, lower = 0, upper = 0.06)) {
+      warning("calcium is outside the recommended range [0, 0.06].")
+    }
 
     KF <- k_value <- temp_k <- KF_deep <- KF_surf <- KS_deep <- KS_surf <-
       check_pc <- pc <- sws_to_tot_deep <- tot_to_sws_surface <- row_id <-
