@@ -5,6 +5,7 @@ nav_order: 98
 permalink: articles
 ---
 
-## List of projects that use Kgen
+## The paper describing Kgen can be found at:
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+> Whiteford, R., Branson, O., and Mayk, D. **Using Kgen to Generate Cross-Verified Apparent Equilibrium Constants (K<sup>*</sup>’s) for Palaeoseawater Carbonate Chemistry.** *G<sup>3</sup>*   [doi:10.1029/2023GC011417](http://doi.org/10.1029/2023GC011417)
+

@@ -23,6 +23,12 @@ Kgen is available for use in Matlab, Python and R.
 
 ---
 
+### Cite Kgen
+
+If you use Kgen, please cite:
+
+> Whiteford, R., Branson, O., and Mayk, D. **Using Kgen to Generate Cross-Verified Apparent Equilibrium Constants (K<sup>*</sup>’s) for Palaeoseawater Carbonate Chemistry.** *G<sup>3</sup>*   [doi:10.1029/2023GC011417](http://doi.org/10.1029/2023GC011417)
+
 ### License
 
 Kgen is open-source and distributed under an [MIT license](https://github.com/PalaeoCarb/Kgen/blob/main/LICENSE). You can find the source code on [GitHub](https://github.com/PalaeoCarb/Kgen).
