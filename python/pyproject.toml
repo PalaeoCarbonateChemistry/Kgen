@@ -18,6 +18,7 @@ classifiers = [
 ]
 dependencies = [
     "numpy>=1.21.5",
+    "pandas<3",
     "pymyami==2.1.1"
 ]
 
