@@ -2,7 +2,7 @@
 kgen.pkg.env <- new.env()
 
 # Select pyMyAMI version
-kgen.pkg.env$pymyami_version <- "2.1.1"
+kgen.pkg.env$pymyami_version <- "2.1.3"
 
 # Load K_calculation.json
 kgen.pkg.env$K_coefs <-
@@ -14,6 +14,7 @@ kgen.pkg.env$K_presscorr_coefs <-
 
 kgen.pkg.env$poly_coefs <-
   rjson::fromJSON(file = system.file("coefficients/polynomial_coefficients.json", package = "kgen"))
+pymyami_version <- "2.1.3"
 
 .onLoad <- function(...) {
   reticulate::py_require(paste0("pymyami==", kgen.pkg.env$pymyami_version))
