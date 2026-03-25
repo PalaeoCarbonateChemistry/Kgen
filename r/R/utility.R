@@ -81,10 +81,7 @@ calc_seawater_correction <-
 
     # Calculate correction factor
     if (tolower(method) %in% c("myami", "myami_polynomial")) {
-      if (!reticulate::py_module_available("pymyami")) {
-        stop("pymyami Python module is not available. Install it or use method = 'r_polynomial'.")
-      }
-      pymyami <- reticulate::import("pymyami", delay_load = TRUE)
+      pymyami <- reticulate::import("pymyami", delay_load = FALSE)
     }
 
     if (tolower(method) == "myami") {
