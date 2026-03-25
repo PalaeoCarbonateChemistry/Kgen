@@ -1,3 +1,6 @@
+## 1.1.0
+Update pymyami dependency to v2.1.3
+
 ## 1.0.0
 Stabilise
 

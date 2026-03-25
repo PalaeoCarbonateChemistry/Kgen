@@ -1,5 +1,9 @@
 # KGen History.
 
+## 1.1.0
+### All
+Update pymyami dependency to v2.1.3
+
 ## 1.0.1
 ### Python
 - Fixed pyproject.toml to include coefficient files in distribution.
