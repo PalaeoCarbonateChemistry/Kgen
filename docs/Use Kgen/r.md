@@ -20,7 +20,10 @@ Kgen is available for installation from CRAN:
 or directly from Github using remotes/devtools:
 `devtools::install_github('PalaeoCarb/Kgen/r')`
 
-This will install Kgen and its dependencies. Kgen relies on `pymyami` for [Mg] and [Ca] correction factors when using the `MyAMI` or `MyAMI_Polynomial` methods. The required version of `pymyami` is automatically resolved via [reticulate](https://rstudio.github.io/reticulate/) when the package is loaded.
+This will install Kgen and its dependencies. Kgen relies on `pymyami` for [Mg] and [Ca] correction factors when using the `MyAMI` or `MyAMI_Polynomial` methods. The required version of `pymyami` is automatically resolved via [reticulate](https://rstudio.github.io/reticulate/) on first use.
+
+For parallel execution support, install the optional packages:
+`install.packages(c("future", "future.apply", "progressr"))`
 
 ## Getting Started
 
@@ -73,13 +76,15 @@ The inputs to **temp_c**, **p_bar**, **sal**, **magnesium**, **calcium**, **sulp
 
 ## Parallel Execution
 
-`calc_Ks()` uses the [future](https://future.futureverse.org/) framework for parallel computation. To enable parallel execution, set a `future::plan()` before calling `calc_Ks()`:
+`calc_Ks()` supports parallel computation via the [future](https://future.futureverse.org/) framework. The `future`, `future.apply`, and `progressr` packages are optional — when not installed, `calc_Ks()` falls back to sequential execution automatically.
+
+To enable parallel execution, set a `future::plan()` before calling `calc_Ks()`:
 
 ```R
 library('kgen')
 
 # Enable parallel execution
-future::plan(future::multisession, workers = parallel::detectCores() - 1)
+future::plan(future::multisession, workers = future::availableCores() - 1)
 
 # Calculate Ks in parallel
 result <- calc_Ks(temp_c = 25, sal = 35)
@@ -88,7 +93,7 @@ result <- calc_Ks(temp_c = 25, sal = 35)
 future::plan(future::sequential)
 ```
 
-## Details
+## Example
 
 Kgen installation and operation example:
 
