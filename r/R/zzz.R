@@ -3,6 +3,16 @@ kgen.pkg.env <- new.env()
 
 # Select pyMyAMI version
 kgen.pkg.env$pymyami_version <- "2.1.3"
+kgen.pkg.env$pymyami_ready <- FALSE
+
+#' Ensure pymyami Python package is available (called lazily on first use)
+#' @noRd
+ensure_pymyami <- function() {
+  if (!kgen.pkg.env$pymyami_ready) {
+    reticulate::py_require(paste0("pymyami==", kgen.pkg.env$pymyami_version))
+    kgen.pkg.env$pymyami_ready <- TRUE
+  }
+}
 
 .onLoad <- function(...) {
   # Load coefficients at load time when system.file() can resolve paths
@@ -14,8 +24,6 @@ kgen.pkg.env$pymyami_version <- "2.1.3"
 
   kgen.pkg.env$poly_coefs <-
     rjson::fromJSON(file = system.file("coefficients/polynomial_coefficients.json", package = "kgen"))
-
-  reticulate::py_require(paste0("pymyami==", kgen.pkg.env$pymyami_version))
 }
 
 .onAttach <- function(lib, pkg) {

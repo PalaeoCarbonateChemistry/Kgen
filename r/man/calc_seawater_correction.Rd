@@ -32,6 +32,9 @@ list of seawater correction factors
 \description{
 Kgen seawater composition correction function
 }
+\examples{
+calc_seawater_correction("K1", sal = 35, temp_c = 25)
+}
 \author{
 Dennis Mayk
 }

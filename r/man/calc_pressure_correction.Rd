@@ -19,6 +19,9 @@ pressure correction factor
 \description{
 Calculate pressure correction factor for a specified equilibrium constant.
 }
+\examples{
+calc_pressure_correction("K1", temp_c = 25, p_bar = 100)
+}
 \author{
 Dennis Mayk
 }

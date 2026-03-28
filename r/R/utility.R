@@ -8,6 +8,8 @@
 #' @param k K to be calculated
 #' @param p_bar Pressure (Bar)
 #' @return pressure correction factor
+#' @examples
+#' calc_pressure_correction("K1", temp_c = 25, p_bar = 100)
 #' @export
 calc_pressure_correction <- function(k, temp_c, p_bar) {
   checkmate::assert(
@@ -67,6 +69,8 @@ kgen_poly <- function(sal, temp_c, magnesium = 0.0528171, calcium = 0.0102821) {
 #' @param k K to be calculated
 #' @param method string describing method which should be either 'myami', 'myami_polynomial', or 'r_polynomial' (Default: 'r_polynomial').
 #' @return list of seawater correction factors
+#' @examples
+#' calc_seawater_correction("K1", sal = 35, temp_c = 25)
 #' @export
 calc_seawater_correction <-
   function(k,
@@ -81,6 +85,7 @@ calc_seawater_correction <-
 
     # Calculate correction factor
     if (tolower(method) %in% c("myami", "myami_polynomial")) {
+      ensure_pymyami()
       pymyami <- reticulate::import("pymyami", delay_load = FALSE)
     }
 

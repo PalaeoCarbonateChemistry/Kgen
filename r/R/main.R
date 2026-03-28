@@ -8,6 +8,12 @@
 #' @param p_bar Pressure (Bar) (optional)
 #' @param sulphate Sulphate concentration in mol/kgsw. Calculated from salinity if not given.
 #' @param fluorine Fluorine concentration in mol/kgsw. Calculated from salinity if not given.
+#' @examples
+#' # Calculate K1 at default conditions
+#' calc_K("K1", temp_c = 25, sal = 35)
+#'
+#' # Calculate K1 with pressure correction
+#' calc_K("K1", temp_c = 25, sal = 35, p_bar = 100)
 #' @return \strong{A single} K at given conditions
 #' @export
 calc_K <-
@@ -130,20 +136,30 @@ calc_K <-
 #' @inheritParams calc_K
 #' @param ks character vectors of Ks to be calculated e.g., c("K0", "K1") (Default: NULL, calculate all Ks)
 #' @examples
-#' \dontrun{
-#' future::plan(future::multisession,
-#'   workers = parallel::detectCores() - 1
-#' )
+#' # Calculate all Ks at default conditions
+#' calc_Ks(temp_c = 25, sal = 35)
 #'
-#' dt_list <- as.list(data.table::CJ(
-#'   temp_c = seq_len(40),
-#'   sal = 30:40,
-#'   p_bar = 0:100,
-#'   magnesium = seq(0, 0.06, by = 0.01),
-#'   calcium = seq(0, 0.06, by = 0.01)
-#' ))
+#' # Calculate specific Ks
+#' calc_Ks(ks = c("K1", "K2"), temp_c = 25, sal = 35)
 #'
-#' res <- do.call(what = calc_Ks, args = dt_list)
+#' \donttest{
+#' # Parallel execution (requires future + future.apply packages)
+#' if (requireNamespace("future", quietly = TRUE)) {
+#'   future::plan(future::multisession,
+#'     workers = future::availableCores() - 1
+#'   )
+#'
+#'   dt_list <- as.list(data.table::CJ(
+#'     temp_c = seq_len(40),
+#'     sal = 30:40,
+#'     p_bar = 0:100,
+#'     magnesium = seq(0, 0.06, by = 0.01),
+#'     calcium = seq(0, 0.06, by = 0.01)
+#'   ))
+#'
+#'   res <- do.call(what = calc_Ks, args = dt_list)
+#'   future::plan(future::sequential)
+#' }
 #' }
 #' @return Data.table of \strong{multiple} Ks at given conditions
 #' @export
@@ -162,25 +178,36 @@ calc_Ks <-
       ks <- names(K_fns)
     }
 
-    # Calculate ks
-    progressr::with_progress({
-      p <- progressr::progressor(along = ks)
-      ks_list <- future.apply::future_lapply(ks, function(k) {
-        result <- calc_K(
-          k = k,
-          temp_c = temp_c,
-          sal = sal,
-          p_bar = p_bar,
-          magnesium = magnesium,
-          calcium = calcium,
-          sulphate = sulphate,
-          fluorine = fluorine,
-          method = method
-        )
-        p()
-        return(result)
-      }, future.seed = NULL)
-    })
+    # Calculate ks — use future.apply if available, otherwise lapply
+    calc_single_k <- function(k) {
+      calc_K(
+        k = k,
+        temp_c = temp_c,
+        sal = sal,
+        p_bar = p_bar,
+        magnesium = magnesium,
+        calcium = calcium,
+        sulphate = sulphate,
+        fluorine = fluorine,
+        method = method
+      )
+    }
+
+    use_future <- requireNamespace("future.apply", quietly = TRUE) &&
+      requireNamespace("progressr", quietly = TRUE)
+
+    if (use_future) {
+      ks_list <- progressr::with_progress({
+        p <- progressr::progressor(along = ks)
+        future.apply::future_lapply(ks, function(k) {
+          result <- calc_single_k(k)
+          p()
+          result
+        }, future.seed = NULL)
+      })
+    } else {
+      ks_list <- lapply(ks, calc_single_k)
+    }
 
     # Return data.table
     ks_value <- data.table::data.table(do.call(cbind, ks_list))
