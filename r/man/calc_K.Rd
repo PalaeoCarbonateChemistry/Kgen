@@ -64,20 +64,35 @@ Calculate \strong{a single} specified stoichiometric equilibrium constant at giv
 
 }}
 \examples{
-\dontrun{
-future::plan(future::multisession,
-  workers = parallel::detectCores() - 1
-)
+# Calculate K1 at default conditions
+calc_K("K1", temp_c = 25, sal = 35)
 
-dt_list <- as.list(data.table::CJ(
-  temp_c = seq_len(40),
-  sal = 30:40,
-  p_bar = 0:100,
-  magnesium = seq(0, 0.06, by = 0.01),
-  calcium = seq(0, 0.06, by = 0.01)
-))
+# Calculate K1 with pressure correction
+calc_K("K1", temp_c = 25, sal = 35, p_bar = 100)
+# Calculate all Ks at default conditions
+calc_Ks(temp_c = 25, sal = 35)
 
-res <- do.call(what = calc_Ks, args = dt_list)
+# Calculate specific Ks
+calc_Ks(ks = c("K1", "K2"), temp_c = 25, sal = 35)
+
+\donttest{
+# Parallel execution (requires future + future.apply packages)
+if (requireNamespace("future", quietly = TRUE)) {
+  future::plan(future::multisession,
+    workers = future::availableCores() - 1
+  )
+
+  dt_list <- as.list(data.table::CJ(
+    temp_c = seq_len(40),
+    sal = 30:40,
+    p_bar = 0:100,
+    magnesium = seq(0, 0.06, by = 0.01),
+    calcium = seq(0, 0.06, by = 0.01)
+  ))
+
+  res <- do.call(what = calc_Ks, args = dt_list)
+  future::plan(future::sequential)
+}
 }
 }
 \author{
