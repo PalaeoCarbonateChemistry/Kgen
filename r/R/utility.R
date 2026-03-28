@@ -36,8 +36,8 @@ calc_pressure_correction <- function(k, temp_c, p_bar) {
 #' @author Dennis Mayk
 #'
 #' @inheritParams calc_K1
-#' @param magnesium magnesium concentration in mol/kgsw. If NULL, modern is assumed (0.0528171). Should be the average magnesium concentration in seawater - a salinity correction is then applied to calculate the magnesium concentration in the sample.
-#' @param calcium calcium concentration in mol/kgsw. If NULL, modern is assumed (0.0102821). Should be the average calcium concentration in seawater - a salinity correction is then applied to calculate the magnesium concentration in the sample.
+#' @param magnesium Magnesium concentration in mol/kgsw. Default is modern seawater (0.0528171). Should be the average magnesium concentration in seawater - a salinity correction is then applied to calculate the magnesium concentration in the sample.
+#' @param calcium Calcium concentration in mol/kgsw. Default is modern seawater (0.0102821). Should be the average calcium concentration in seawater - a salinity correction is then applied to calculate the calcium concentration in the sample.
 kgen_poly <- function(sal, temp_c, magnesium = 0.0528171, calcium = 0.0102821) {
   # Ensure all inputs are the same length
   n <- length(sal)
