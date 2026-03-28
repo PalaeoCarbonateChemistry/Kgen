@@ -12,9 +12,12 @@
 calc_pressure_correction <- function(k, temp_c, p_bar) {
   checkmate::assert(
     combine = "and",
-    checkmate::check_character(k),
-    checkmate::check_numeric(temp_c, lower = 0, upper = 40)
+    checkmate::check_character(k)
   )
+
+  if (!checkmate::test_numeric(temp_c, lower = 0, upper = 40)) {
+    warning("temp_c is outside the recommended range [0, 40].")
+  }
 
   out <-
     calc_pc(
@@ -77,9 +80,11 @@ calc_seawater_correction <-
     )
 
     # Calculate correction factor
-    if (tolower(method) == "myami") {
+    if (tolower(method) %in% c("myami", "myami_polynomial")) {
       pymyami <- reticulate::import("pymyami", delay_load = FALSE)
+    }
 
+    if (tolower(method) == "myami") {
       seawater_correction <-
         pymyami$calculate_seawater_correction(
           Sal = sal,
@@ -89,8 +94,6 @@ calc_seawater_correction <-
         )
     }
     if (tolower(method) == "myami_polynomial") {
-      pymyami <- reticulate::import("pymyami", delay_load = FALSE)
-
       seawater_correction <-
         pymyami$approximate_seawater_correction(
           Sal = sal,

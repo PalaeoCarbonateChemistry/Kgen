@@ -66,15 +66,15 @@ Calculate \strong{a single} specified stoichiometric equilibrium constant at giv
 \examples{
 \dontrun{
 future::plan(future::multisession,
-  workers = parallelly::availableCores() - 1
+  workers = parallel::detectCores() - 1
 )
 
 dt_list <- as.list(data.table::CJ(
   temp_c = seq_len(40),
   sal = 30:40,
   p_bar = 0:100,
-  magnesium = 0:0.06,
-  calcium = 0:0.06
+  magnesium = seq(0, 0.06, by = 0.01),
+  calcium = seq(0, 0.06, by = 0.01)
 ))
 
 res <- do.call(what = calc_Ks, args = dt_list)
