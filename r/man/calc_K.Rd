@@ -38,9 +38,9 @@ calc_Ks(
 
 \item{p_bar}{Pressure (Bar) (optional)}
 
-\item{magnesium}{magnesium concentration in mol/kgsw. If None, modern is assumed (0.0528171). Should be the average magnesium concentration in seawater - a salinity correction is then applied to calculate the magnesium concentration in the sample.}
+\item{magnesium}{magnesium concentration in mol/kgsw. If NULL, modern is assumed (0.0528171). Should be the average magnesium concentration in seawater - a salinity correction is then applied to calculate the magnesium concentration in the sample.}
 
-\item{calcium}{calcium concentration in mol/kgsw. If None, modern is assumed (0.0102821). Should be the average calcium concentration in seawater - a salinity correction is then applied to calculate the magnesium concentration in the sample.}
+\item{calcium}{calcium concentration in mol/kgsw. If NULL, modern is assumed (0.0102821). Should be the average calcium concentration in seawater - a salinity correction is then applied to calculate the magnesium concentration in the sample.}
 
 \item{sulphate}{Sulphate concentration in mol/kgsw. Calculated from salinity if not given.}
 
