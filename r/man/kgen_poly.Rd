@@ -11,9 +11,9 @@ kgen_poly(sal, temp_c, magnesium = 0.0528171, calcium = 0.0102821)
 
 \item{temp_c}{Temperature (Celcius)}
 
-\item{magnesium}{magnesium concentration in mol/kgsw. If None, modern is assumed (0.0528171). Should be the average magnesium concentration in seawater - a salinity correction is then applied to calculate the magnesium concentration in the sample.}
+\item{magnesium}{Magnesium concentration in mol/kgsw. Default is modern seawater (0.0528171). Should be the average magnesium concentration in seawater - a salinity correction is then applied to calculate the magnesium concentration in the sample.}
 
-\item{calcium}{calcium concentration in mol/kgsw. If None, modern is assumed (0.0102821). Should be the average calcium concentration in seawater - a salinity correction is then applied to calculate the magnesium concentration in the sample.}
+\item{calcium}{Calcium concentration in mol/kgsw. Default is modern seawater (0.0102821). Should be the average calcium concentration in seawater - a salinity correction is then applied to calculate the calcium concentration in the sample.}
 }
 \description{
 Kgen R polynomial function

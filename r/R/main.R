@@ -8,6 +8,12 @@
 #' @param p_bar Pressure (Bar) (optional)
 #' @param sulphate Sulphate concentration in mol/kgsw. Calculated from salinity if not given.
 #' @param fluorine Fluorine concentration in mol/kgsw. Calculated from salinity if not given.
+#' @examples
+#' # Calculate K1 at default conditions
+#' calc_K("K1", temp_c = 25, sal = 35)
+#'
+#' # Calculate K1 with pressure correction
+#' calc_K("K1", temp_c = 25, sal = 35, p_bar = 100)
 #' @return \strong{A single} K at given conditions
 #' @export
 calc_K <-
@@ -28,15 +34,24 @@ calc_K <-
         tolower(method),
         choices = c("r_polynomial", "myami_polynomial", "myami")
       ),
-      checkmate::check_string(k),
-      checkmate::check_numeric(temp_c, lower = 0, upper = 40),
-      checkmate::check_numeric(sal, lower = 30, upper = 40),
-      checkmate::check_numeric(magnesium, lower = 0, upper = 0.06),
-      checkmate::check_numeric(calcium, lower = 0, upper = 0.06)
+      checkmate::check_string(k)
     )
 
+    if (!checkmate::test_numeric(temp_c, lower = 0, upper = 40)) {
+      warning("temp_c is outside the recommended range [0, 40].")
+    }
+    if (!checkmate::test_numeric(sal, lower = 30, upper = 40)) {
+      warning("sal is outside the recommended range [30, 40].")
+    }
+    if (!checkmate::test_numeric(magnesium, lower = 0, upper = 0.06)) {
+      warning("magnesium is outside the recommended range [0, 0.06].")
+    }
+    if (!checkmate::test_numeric(calcium, lower = 0, upper = 0.06)) {
+      warning("calcium is outside the recommended range [0, 0.06].")
+    }
+
     KF <- k_value <- temp_k <- KF_deep <- KF_surf <- KS_deep <- KS_surf <-
-      check_pc <- pc <- sws_to_tot_deep <- tot_to_sws_surface <- row_id <-
+      check_pc <- pc <- sws_to_tot_deep <- tot_to_sws_surface <-
       seawater_correction <- NULL
 
     dat <- data.table::data.table(temp_c, sal, p_bar, magnesium, calcium, sulphate, fluorine)
@@ -44,26 +59,16 @@ calc_K <-
     # Celsius to Kelvin
     dat[, temp_k := temp_c + 273.15]
 
-    # Load K_calculation.json
-    K_coefs <-
-      rjson::fromJSON(file = system.file("coefficients/K_calculation.json", package = "kgen"))
-    K_coefs <- K_coefs$coefficients
-
     # Select function and run calculation
     K_fn <- K_fns[[k]]
     dat[, k_value := K_fn(
-      coefficients = K_coefs[[k]],
+      coefficients = kgen.pkg.env$K_coefs[[k]],
       temp_c = temp_c,
       sal = sal
     )]
 
     # Pressure correction?
     if (!is.null(p_bar)) {
-      # Load K_pressure_correction.json
-      K_presscorr_coefs <-
-        rjson::fromJSON(file = system.file("coefficients/K_pressure_correction.json", package = "kgen"))
-      K_presscorr_coefs <- K_presscorr_coefs$coefficients
-
       if (is.null(sulphate)) {
         dat[, sulphate := calc_sulphate(sal = sal)]
       } else {
@@ -76,19 +81,19 @@ calc_K <-
         dat[is.na(fluorine), fluorine := calc_fluorine(sal = sal)]
       }
 
-      dat[, KS_surf := K_fns[["KS"]](coefficients = K_coefs[["KS"]],
+      dat[, KS_surf := K_fns[["KS"]](coefficients = kgen.pkg.env$K_coefs[["KS"]],
         temp_c = temp_c,
         sal = sal)]
       dat[, KS_deep := KS_surf * calc_pc(
-        coefficients = K_presscorr_coefs[["KS"]],
+        coefficients = kgen.pkg.env$K_presscorr_coefs[["KS"]],
         p_bar = p_bar,
         temp_c = temp_c
       )]
-      dat[, KF_surf := K_fns[["KF"]](coefficients = K_coefs[["KF"]],
+      dat[, KF_surf := K_fns[["KF"]](coefficients = kgen.pkg.env$K_coefs[["KF"]],
         temp_c = temp_c,
         sal = sal)]
       dat[, KF_deep := KF_surf * calc_pc(
-        coefficients = K_presscorr_coefs[["KF"]],
+        coefficients = kgen.pkg.env$K_presscorr_coefs[["KF"]],
         p_bar = p_bar,
         temp_c = temp_c
       )]
@@ -130,6 +135,32 @@ calc_K <-
 #'
 #' @inheritParams calc_K
 #' @param ks character vectors of Ks to be calculated e.g., c("K0", "K1") (Default: NULL, calculate all Ks)
+#' @examples
+#' # Calculate all Ks at default conditions
+#' calc_Ks(temp_c = 25, sal = 35)
+#'
+#' # Calculate specific Ks
+#' calc_Ks(ks = c("K1", "K2"), temp_c = 25, sal = 35)
+#'
+#' \donttest{
+#' # Parallel execution (requires future + future.apply packages)
+#' if (requireNamespace("future", quietly = TRUE)) {
+#'   future::plan(future::multisession,
+#'     workers = future::availableCores() - 1
+#'   )
+#'
+#'   dt_list <- as.list(data.table::CJ(
+#'     temp_c = seq_len(40),
+#'     sal = 30:40,
+#'     p_bar = 0:100,
+#'     magnesium = seq(0, 0.06, by = 0.01),
+#'     calcium = seq(0, 0.06, by = 0.01)
+#'   ))
+#'
+#'   res <- do.call(what = calc_Ks, args = dt_list)
+#'   future::plan(future::sequential)
+#' }
+#' }
 #' @return Data.table of \strong{multiple} Ks at given conditions
 #' @export
 calc_Ks <-
@@ -147,8 +178,8 @@ calc_Ks <-
       ks <- names(K_fns)
     }
 
-    # Calculate ks
-    ks_list <- pbapply::pblapply(ks, function(k) {
+    # Calculate ks — use future.apply if available, otherwise lapply
+    calc_single_k <- function(k) {
       calc_K(
         k = k,
         temp_c = temp_c,
@@ -160,7 +191,23 @@ calc_Ks <-
         fluorine = fluorine,
         method = method
       )
-    })
+    }
+
+    use_future <- requireNamespace("future.apply", quietly = TRUE) &&
+      requireNamespace("progressr", quietly = TRUE)
+
+    if (use_future) {
+      ks_list <- progressr::with_progress({
+        p <- progressr::progressor(along = ks)
+        future.apply::future_lapply(ks, function(k) {
+          result <- calc_single_k(k)
+          p()
+          result
+        }, future.seed = NULL)
+      })
+    } else {
+      ks_list <- lapply(ks, calc_single_k)
+    }
 
     # Return data.table
     ks_value <- data.table::data.table(do.call(cbind, ks_list))

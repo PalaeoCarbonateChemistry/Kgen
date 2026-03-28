@@ -20,9 +20,9 @@ calc_seawater_correction(
 
 \item{temp_c}{Temperature (Celcius)}
 
-\item{magnesium}{magnesium concentration in mol/kgsw. If None, modern is assumed (0.0528171). Should be the average magnesium concentration in seawater - a salinity correction is then applied to calculate the magnesium concentration in the sample.}
+\item{magnesium}{Magnesium concentration in mol/kgsw. Default is modern seawater (0.0528171). Should be the average magnesium concentration in seawater - a salinity correction is then applied to calculate the magnesium concentration in the sample.}
 
-\item{calcium}{calcium concentration in mol/kgsw. If None, modern is assumed (0.0102821). Should be the average calcium concentration in seawater - a salinity correction is then applied to calculate the magnesium concentration in the sample.}
+\item{calcium}{Calcium concentration in mol/kgsw. Default is modern seawater (0.0102821). Should be the average calcium concentration in seawater - a salinity correction is then applied to calculate the calcium concentration in the sample.}
 
 \item{method}{string describing method which should be either 'myami', 'myami_polynomial', or 'r_polynomial' (Default: 'r_polynomial').}
 }
@@ -31,6 +31,9 @@ list of seawater correction factors
 }
 \description{
 Kgen seawater composition correction function
+}
+\examples{
+calc_seawater_correction("K1", sal = 35, temp_c = 25)
 }
 \author{
 Dennis Mayk
